@@ -1,7 +1,8 @@
-import logo from './logo.svg';
 import './App.css';
 import styles from './calendar_modal.module.css'
 import React, { useState } from 'react';
+
+import {calendarModalHtml} from './calendar_modal'
 
 function App() {
 const [show, setShow] = useState(false);
@@ -28,7 +29,8 @@ function Modal(props){
     return (
       <div class={styles.background}>
         <div class={styles.contentCss}>
-          <p>これはカレンダーの中身になる予定のコンテンツ</p>
+          {calendarModalHtml()}
+          <p>動かない!</p>
           <p><button onClick={props.closeModal}>close</button></p>
         </div>
       </div>
