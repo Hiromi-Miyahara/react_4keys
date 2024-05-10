@@ -30,7 +30,7 @@ function Modal(props){
       <div class={styles.background}>
         <div class={styles.contentCss}>
           {calendarModalHtml()}
-          <p>動かない!</p>
+          <p>動いたよ!</p>
           <p><button onClick={props.closeModal}>close</button></p>
         </div>
       </div>
