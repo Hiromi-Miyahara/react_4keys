@@ -4,9 +4,9 @@ function calendarModalHtml(){
 
     const dayCell = (day) => {
         return (
-        <td class="p-calendar__cell">
-            <div class="p-calendar__cell--layer js-target-selectedLine">
-                <div class="default-padding pointer u-hide js-target-edgeMark js-target-dateInfo">{day}</div>
+        <td className="p-calendar__cell">
+            <div className="p-calendar__cell--layer js-target-selectedLine">
+                <div className="default-padding pointer u-hide js-target-edgeMark js-target-dateInfo">{day}</div>
             </div>
         </td>)   
     };
@@ -14,7 +14,7 @@ function calendarModalHtml(){
     const weekCell = () => {
         const weekDays = [1, 2, 3, 4, 5, 6, 7];
         return (
-            <tr class="p-calendar__week">
+            <tr className="p-calendar__week">
                 {weekDays.map(day => dayCell(day))}
             </tr>
         )
@@ -46,44 +46,44 @@ function calendarModalHtml(){
     // 4. クリックした値をstateとかで保持できる
 
     return(
-        <div class="p-calendar">
-        <div class="p-calendar__header">
-          <p class="p-calendar__title js-target-calendarHeaderTitle"></p>
-          <p class="p-calendar__duration js-target-calendarHeaderPeriod"></p>
+        <div className="p-calendar">
+        <div className="p-calendar__header">
+          <p className="p-calendar__title js-target-calendarHeaderTitle"></p>
+          <p className="p-calendar__duration js-target-calendarHeaderPeriod"></p>
         </div>
-        <div class="p-calendar__container">
-          <table class="p-calendar__table">
-            <tr class="p-calendar__weekHeader">
-              <th class="p-calendar__weekDay">日</th>
-              <th class="p-calendar__weekDay">月</th>
-              <th class="p-calendar__weekDay">火</th>
-              <th class="p-calendar__weekDay">水</th>
-              <th class="p-calendar__weekDay">木</th>
-              <th class="p-calendar__weekDay">金</th>
-              <th class="p-calendar__weekDay">土</th>
+        <div className="p-calendar__container">
+          <table className="p-calendar__table">
+            <tr className="p-calendar__weekHeader">
+              <th className="p-calendar__weekDay">日</th>
+              <th className="p-calendar__weekDay">月</th>
+              <th className="p-calendar__weekDay">火</th>
+              <th className="p-calendar__weekDay">水</th>
+              <th className="p-calendar__weekDay">木</th>
+              <th className="p-calendar__weekDay">金</th>
+              <th className="p-calendar__weekDay">土</th>
             </tr>
             {monthCell()}
             {/* ここから下はテンプレートなので、特別に何かしない限り使われることはない */}
             <template id="month-template">
-              <table class='p-calendar__month'>
-                <caption class='p-calendar__displayMonth js-target-displayMonth'></caption>
+              <table className='p-calendar__month'>
+                <caption className='p-calendar__displayMonth js-target-displayMonth'></caption>
               </table>
             </template>
             <template id="week-template">
-              <tr class="p-calendar__week">
+              <tr className="p-calendar__week">
                 {/* したの部分を7回繰り返すことで、一月分のcellを作成することができる */}
-                  <td class="p-calendar__cell">
-                    <div class="p-calendar__cell--layer js-target-selectedLine">
-                      <div class="default-padding pointer u-hide js-target-edgeMark js-target-dateInfo"></div>
+                  <td className="p-calendar__cell">
+                    <div className="p-calendar__cell--layer js-target-selectedLine">
+                      <div className="default-padding pointer u-hide js-target-edgeMark js-target-dateInfo"></div>
                     </div>
                   </td>
               </tr>
             </template>
 
           </table>
-          <div class="p-calendar__content js-target-createCalendar"></div>
-          <div class="p-calendar__footer">
-            <p class="cancel-btn js-click-cancel-btn">キャンセル</p>
+          <div className="p-calendar__content js-target-createCalendar"></div>
+          <div className="p-calendar__footer">
+            <p className="cancel-btn js-click-cancel-btn">キャンセル</p>
           </div>
         </div>
       </div>
