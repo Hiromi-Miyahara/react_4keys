@@ -21,6 +21,41 @@ function calendarModalHtml(){
     };
 
     const monthCell = () => {
+        const thisMonth = new Date()
+
+        const getLastDay = (year, month) => {
+            return new Date(year, month, 0).getDate();
+        };
+
+        const getMonthLastDay = (thisMonth) => {
+            thisMonth.setMonth(thisMonth.getMonth() + 1);
+            return thisMonth.setDate(0);
+        }
+
+        const getMonthFirstDay = (thisMonth) => {
+            return new Date(thisMonth.getFullYear(), thisMonth.getMonth(), 1);
+        }
+
+        const monthArray = (times)=> {
+            const array = [];
+            for (let i = 0; i < times; i++) {
+                array.push(i);
+            }
+            return array;
+        };
+
+        const monthFirstDayType = getMonthFirstDay(thisMonth).getDay();
+        const thisMonthLength = getLastDay(2024, 5);
+        const monthLastDayType = getMonthLastDay(thisMonth);
+
+        const thisMonthArray = monthArray(thisMonthLength);
+        thisMonthArray.unshift('blank'* monthFirstDayType);
+console.log(thisMonthArray);
+
+        // const monthLastDay = lastMonth.setDate(0)
+        // 1. その週の日付が配列として入ってくる。blankなら''、日付なら日付を入れる
+        // 2. 今月の最初の日付の曜日を取得、差分をループの最初に加える月最後の差分はループの最後に加える
+
         return (
             <>
                 {weekCell()}
@@ -31,19 +66,17 @@ function calendarModalHtml(){
             </>
         );
     }
-    
-    
 
-// TODO: 
-    // 1. 一月分のhtmlが綺麗に表示されるようにする
-        // a. 一月分の日付がカレンダーのように表示される
-            // 1. 現在の月の最初の日付と最後の日付を取得する。
-            // 2. 現在の月の最初と最後の日付の曜日を取得する。
-            // 3. 最初の日の前よりの曜日、最後より後の曜日は他のhtml要素を放り込んでさわれないようにする必要がある
-        // b. viewを整える
-    // 2. 一月をテンプレートに分けて、複数付きが表示できるようにする
-    // 3. クリックしたら色とかが付くようにできる
-    // 4. クリックした値をstateとかで保持できる
+// TODO:
+//  1. 一月分のhtmlが綺麗に表示されるようにする
+//     a. 一月分の日付がカレンダーのように表示される
+//         1. 現在の月の最初の日付と最後の日付を取得する。
+//         2. 現在の月の最初と最後の日付の曜日を取得する。
+//         3. 最初の日の前よりの曜日、最後より後の曜日は他のhtml要素を放り込んでさわれないようにする必要がある
+//     b. viewを整える
+//  2. 一月をテンプレートに分けて、複数付きが表示できるようにする
+//  3. クリックしたら色とかが付くようにできる
+//  4. クリックした値をstateとかで保持できる
 
     return(
         <div className="p-calendar">
