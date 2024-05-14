@@ -1,25 +1,42 @@
-import logo from './logo.svg';
 import './App.css';
+import styles from './calendar_modal.module.css'
+import React, { useState } from 'react';
+
+import {calendarModalHtml} from './calendar_modal'
 
 function App() {
+const [show, setShow] = useState(false);
+
+  const openModal = () => {
+    return setShow(true)
+  }
+
+  const closeModal = () => {
+    return setShow(false)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <button onClick={openModal}>このテキストをクリックでモーダルが開くようにしたい</button> 
+      <Modal show={show} closeModal={closeModal}/>
+   </>
   );
+}
+
+function Modal(props){
+
+  if(props.show){
+    return (
+      <div class={styles.background}>
+        <div class={styles.contentCss}>
+          {calendarModalHtml()}
+          <p>動いたよ!</p>
+          <p><button onClick={props.closeModal}>close</button></p>
+        </div>
+      </div>
+      )
+  }
+
 }
 
 export default App;
