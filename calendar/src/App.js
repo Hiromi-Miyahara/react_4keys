@@ -1,25 +1,42 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useState} from 'react';
+
+
+// TODO: state使って入力された値がリストに残るようにする
+function TodoDiv() {
+    const [todos, setTodos] = useState([])
+
+    const clickHandler = (e) => {
+        console.log("hello world")
+    }
+
+    return (
+        <div className="todoDiv">
+            <form onSubmit={clickHandler}>
+                <input/>
+                <button>追加</button>
+            </form>
+        </div>
+    )
+}
+
+function ListDiv() {
+    return (
+        <tr className="listDiv">
+            <td>hello world</td>
+        </tr>
+    )
+}
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <>
+            <div className="App">
+                <TodoDiv/>
+            </div>
+            <ListDiv/>
+        </>
+    );
 }
 
 export default App;
