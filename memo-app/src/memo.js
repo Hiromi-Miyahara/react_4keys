@@ -8,6 +8,8 @@ import "highlight.js/styles/github.css";
 import EasyMDE from "easymde";
 import styled from "styled-components"
 
+// TODO; 文字を入力すると、focusが外れる。どこかで全体のレンダーが起きているからと思われる
+
 function MarkdownEditor() {
     const [markdownValues, setMarkdownValues] = useState(() => {
         const savedMarkdown = localStorage.getItem("markdownValues");
@@ -16,21 +18,6 @@ function MarkdownEditor() {
     const [titleText, setTitleText] = useState(() => {
         const savedTitle = localStorage.getItem("titleText");
         return savedTitle ? JSON.parse(savedTitle) : "";
-    });
-
-    // const easyMDE = new EasyMDE({
-    //     toolbar: false,
-    //     toolbarTips: false
-    // })
-
-    marked.setOptions({
-        toolbar: false,
-        highlight: (code, lang) => {
-            const validLanguage = hljs.getLanguage(lang) ? lang : 'plaintext';
-            return hljs.highlight(code, {language: validLanguage}).value;
-        },
-        toolbarTips: false
-        // TODO: toolbarとかを非表示にするためには、new MDEでやる必要がありそうなので、後回しにする
     });
 
     useEffect(() => {
@@ -54,9 +41,17 @@ function MarkdownEditor() {
         text-align: center;
         `;
 
+    const markdownOptions = {
+        toolbar: false,
+        highlight: (code, lang) => {
+            const validLanguage = hljs.getLanguage(lang) ? lang : 'plaintext';
+            return hljs.highlight(code, {language: validLanguage}).value;
+        },
+    }
+
     return <>
         <input value={titleText} onChange={(e)=> {setTitleText(e.target.value)}} placeholder="Title" />
-        <SimpleMde value={markdownValues} onChange={onChange}/>
+        <SimpleMde value={markdownValues} onChange={onChange} options={markdownOptions}/>
         <div>
             <Title >{titleText}</Title>
             <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked(markdownValues))}} />
