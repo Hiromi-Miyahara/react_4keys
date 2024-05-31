@@ -1,11 +1,19 @@
 import './App.css';
 
-import MarkdownEditor from './memo'
+import MarkdownEditor from './MarkdownEditor'
+import MarkdownList from "./MarkdownList.jsx";
+import styled from "styled-components";
+
+const MarkdownWrapper = styled.div`
+display: flex;`
 
 function App() {
-  return (
-      <MarkdownEditor/>
-  );
+    return (
+        <MarkdownWrapper>
+            <MarkdownList/>
+            <MarkdownEditor/>
+        </MarkdownWrapper>
+    );
 }
 
 export default App;

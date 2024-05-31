@@ -8,6 +8,10 @@ import "highlight.js/styles/github.css";
 import EasyMDE from "easymde";
 import styled from "styled-components"
 
+const EditorContainer = styled.div`
+display: flex;
+flex-direction: column;`
+
 function MarkdownEditor() {
     const [markdownValues, setMarkdownValues] = useState(() => {
         const savedMarkdown = localStorage.getItem("markdownValues");
@@ -39,6 +43,7 @@ function MarkdownEditor() {
     const Title = styled.h1`
         font-size: 40px;
         text-align: center;
+        min-width: 200px;
     `;
 
     const markdownOptions = useMemo(() => ({
@@ -49,7 +54,7 @@ function MarkdownEditor() {
         },
     }), []);
 
-    return <>
+    return <EditorContainer>
         <input value={titleText} onChange={(e) => {
             setTitleText(e.target.value)
         }} placeholder="Title"/>
@@ -58,7 +63,7 @@ function MarkdownEditor() {
             <Title>{titleText}</Title>
             <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked(markdownValues))}}/>
         </div>
-    </>
+    </EditorContainer>
 }
 
 export default MarkdownEditor;
