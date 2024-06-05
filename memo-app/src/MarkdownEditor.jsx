@@ -9,37 +9,36 @@ import EasyMDE from "easymde";
 import styled from "styled-components"
 
 const EditorContainer = styled.div`
-display: flex;
-flex-direction: column;`
+    display: flex;
+    flex-direction: column;`
 
 function MarkdownEditor() {
-    const [markdownValues, setMarkdownValues] = useState(() => {
-        const savedMarkdown = localStorage.getItem("markdownValues");
-        return savedMarkdown ? JSON.parse(savedMarkdown) : "";
-    });
-
-    const [titleText, setTitleText] = useState(() => {
-        const savedTitle = localStorage.getItem("titleText");
-        return savedTitle ? JSON.parse(savedTitle) : "";
+    const [markdown, setMarkdown] = useState(() => {
+        const savedMarkdown = localStorage.getItem("markdown");
+        const parsedMarkdown = JSON.parse(savedMarkdown);
+        const title = parsedMarkdown.title ? parsedMarkdown.title : "";
+        const text = parsedMarkdown.text ? parsedMarkdown.text : "";
+        return {title: title, text: text}
     });
 
     useEffect(() => {
-        localStorage.setItem("markdownValues", JSON.stringify(markdownValues));
-    }, [markdownValues]);
-
-    useEffect(() => {
-        localStorage.setItem("titleText", JSON.stringify(titleText));
-    }, [titleText]);
+        localStorage.setItem("markdown", JSON.stringify({title:markdown.title , text:markdown.text }));
+    }, [markdown]);
 
     // highlightjsを初期化
     // ここで毎回ハイライトを聞かせに行っているのが原因?
     useEffect(() => {
-        hljs.initHighlighting();
+        hljs.highlightAll();
     }, []);
 
-    const onChange = (value) => {
-        setMarkdownValues(value);
+    const changeTitle = (value) => {
+        setMarkdown({title: value.target.value, text: markdown.text});
     }
+
+    const changeText = (value) => {
+        setMarkdown({title: markdown.title, text: value});
+    }
+
     const Title = styled.h1`
         font-size: 40px;
         text-align: center;
@@ -55,13 +54,11 @@ function MarkdownEditor() {
     }), []);
 
     return <EditorContainer>
-        <input value={titleText} onChange={(e) => {
-            setTitleText(e.target.value)
-        }} placeholder="Title"/>
-        <SimpleMde value={markdownValues} onChange={onChange} options={markdownOptions}/>
-        <div>
-            <Title>{titleText}</Title>
-            <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked(markdownValues))}}/>
+        <input value={markdown.title} onChange={changeTitle} placeholder="Title"/>
+        <SimpleMde value={markdown.text} onChange={changeText} options={markdownOptions}/>
+        <div className="markdownTextArea">
+            <Title>{markdown.title}</Title>
+            <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked(markdown.text))}}/>
         </div>
     </EditorContainer>
 }

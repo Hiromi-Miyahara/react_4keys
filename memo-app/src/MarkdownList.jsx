@@ -5,10 +5,14 @@ import styled from "styled-components";
 //      localStorageに保存したデータ(メモのタイトル)がリストに表示されるようにする
 //      全体の
 
+const savedMarkdown = JSON.parse(localStorage.getItem("markdown"));
+
+
 function MarkdownList() {
     return (
         <ListContainer>
-            <p>こんにちは!</p>
+
+            <p>{savedMarkdown.title}</p>
         </ListContainer>
     )
 }
