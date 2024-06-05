@@ -26,7 +26,6 @@ function MarkdownEditor() {
     }, [markdown]);
 
     // highlightjsを初期化
-    // ここで毎回ハイライトを聞かせに行っているのが原因?
     useEffect(() => {
         hljs.highlightAll();
     }, []);
