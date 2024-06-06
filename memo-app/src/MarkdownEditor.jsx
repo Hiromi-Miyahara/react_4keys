@@ -18,11 +18,11 @@ function MarkdownEditor() {
         const parsedMarkdown = JSON.parse(savedMarkdown);
         const title = parsedMarkdown.title ? parsedMarkdown.title : "";
         const text = parsedMarkdown.text ? parsedMarkdown.text : "";
-        return {title: title, text: text}
+        return {title: title, text: text, key: getUniqueStr()}
     });
 
     useEffect(() => {
-        localStorage.setItem("markdown", JSON.stringify({title:markdown.title , text:markdown.text }));
+        localStorage.setItem("markdown", JSON.stringify({title: markdown.title, text: markdown.text, key: markdown.key}));
     }, [markdown]);
 
     // highlightjsを初期化
@@ -31,11 +31,25 @@ function MarkdownEditor() {
     }, []);
 
     const changeTitle = (value) => {
-        setMarkdown({title: value.target.value, text: markdown.text});
+        setMarkdown({
+            title: value.target.value,
+            text: markdown.text,
+            key: markdown.key ? markdown.key : getUniqueStr()
+        });
     }
 
     const changeText = (value) => {
-        setMarkdown({title: markdown.title, text: value});
+        setMarkdown({
+            title: markdown.title,
+            text: value,
+            key: markdown.key ? markdown.key : getUniqueStr()
+        });
+    }
+
+    function getUniqueStr(myStrong) {
+        var strong = 1000;
+        if (myStrong) strong = myStrong;
+        return new Date().getTime().toString(16) + Math.floor(strong * Math.random()).toString(16)
     }
 
     const Title = styled.h1`

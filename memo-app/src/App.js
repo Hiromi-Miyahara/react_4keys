@@ -5,6 +5,8 @@ import styled from "styled-components";
 const MarkdownWrapper = styled.div`
 display: flex;`
 
+console.log(JSON.parse(localStorage.getItem("markdown")))
+
 function App() {
     return (
         <MarkdownWrapper>
