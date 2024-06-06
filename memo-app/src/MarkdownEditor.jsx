@@ -22,7 +22,11 @@ function MarkdownEditor() {
     });
 
     useEffect(() => {
-        localStorage.setItem("markdown", JSON.stringify({title: markdown.title, text: markdown.text, key: markdown.key}));
+        localStorage.setItem("markdown", JSON.stringify({
+            title: markdown.title,
+            text: markdown.text,
+            key: markdown.key
+        }));
     }, [markdown]);
 
     // highlightjsを初期化
@@ -52,11 +56,30 @@ function MarkdownEditor() {
         return new Date().getTime().toString(16) + Math.floor(strong * Math.random()).toString(16)
     }
 
+    const Input = styled.div`
+        background-color: #f3f3f3;
+    input{
+        background-color: #f3f3f3;
+    }`;
+
+    const MarkDownInput = styled.div`
+    background-color: #f3f3f3;
+    div{
+        background-color: #f3f3f3;
+    }`
+
     const Title = styled.h1`
         font-size: 40px;
         text-align: center;
         min-width: 200px;
     `;
+
+    const CodeBackGroundColor = styled.code`
+        background-color: #f3f3f3;
+
+        code {
+            background-color: #f3f3f3
+        }`;
 
     const markdownOptions = useMemo(() => ({
         toolbar: false,
@@ -64,14 +87,21 @@ function MarkdownEditor() {
             const validLanguage = hljs.getLanguage(lang) ? lang : 'plaintext';
             return hljs.highlight(code, {language: validLanguage}).value;
         },
+        minHeight: "500px",
     }), []);
 
     return <EditorContainer>
-        <input value={markdown.title} onChange={changeTitle} placeholder="Title"/>
-        <SimpleMde value={markdown.text} onChange={changeText} options={markdownOptions}/>
+        <Input>
+            <input value={markdown.title} onChange={changeTitle} placeholder="Title"/>
+        </Input>
+        <MarkDownInput>
+            <SimpleMde value={markdown.text} onChange={changeText} options={markdownOptions}/>
+        </MarkDownInput>
         <div className="markdownTextArea">
             <Title>{markdown.title}</Title>
-            <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked(markdown.text))}}/>
+            <CodeBackGroundColor>
+                <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked(markdown.text))}}/>
+            </CodeBackGroundColor>
         </div>
     </EditorContainer>
 }
