@@ -7,10 +7,50 @@ import hljs from 'highlight.js'
 import "highlight.js/styles/github.css";
 import EasyMDE from "easymde";
 import styled from "styled-components"
+import "./easyMDE.css";
 
 const EditorContainer = styled.div`
     display: flex;
     flex-direction: column;`
+
+
+const Input = styled.div`
+    background-color: #f3f3f3;
+    width: 100%;
+    height: auto;
+    padding: 40px 0 40px 0;
+
+    textarea {
+        background-color: #f3f3f3;
+        max-width: 1200px;
+        width: 100%;
+        min-width: 700px;
+        height: 100%;
+        font-size: 40px;
+        font-weight: bold;
+        border: none;
+        white-space: wrap;
+        field-sizing: content;
+    }`;
+
+const MarkDownInput = styled.div`
+    div {
+        background-color: #f3f3f3;
+        //border: none !important
+    }`
+
+const Title = styled.h1`
+    font-size: 40px;
+    text-align: center;
+    min-width: 200px;
+`;
+
+const CodeBackGroundColor = styled.code`
+    background-color: #f3f3f3;
+
+    code {
+        background-color: #cfcfcf
+    }`;
 
 function MarkdownEditor() {
     const [markdown, setMarkdown] = useState(() => {
@@ -56,31 +96,6 @@ function MarkdownEditor() {
         return new Date().getTime().toString(16) + Math.floor(strong * Math.random()).toString(16)
     }
 
-    const Input = styled.div`
-        background-color: #f3f3f3;
-    input{
-        background-color: #f3f3f3;
-    }`;
-
-    const MarkDownInput = styled.div`
-    background-color: #f3f3f3;
-    div{
-        background-color: #f3f3f3;
-    }`
-
-    const Title = styled.h1`
-        font-size: 40px;
-        text-align: center;
-        min-width: 200px;
-    `;
-
-    const CodeBackGroundColor = styled.code`
-        background-color: #f3f3f3;
-
-        code {
-            background-color: #f3f3f3
-        }`;
-
     const markdownOptions = useMemo(() => ({
         toolbar: false,
         highlight: (code, lang) => {
@@ -88,14 +103,19 @@ function MarkdownEditor() {
             return hljs.highlight(code, {language: validLanguage}).value;
         },
         minHeight: "500px",
+        spellChecker: false,
+        initialValue: "文字を入力",
+        // timeFormat
     }), []);
 
     return <EditorContainer>
         <Input>
-            <input value={markdown.title} onChange={changeTitle} placeholder="Title"/>
+            {/*TODO: inputではなく、textareaにすること*/}
+            <textarea value={markdown.title} onChange={changeTitle} placeholder="Title"/>
+            {/*<input value={markdown.title} onChange={changeTitle} placeholder="Title"/>*/}
         </Input>
         <MarkDownInput>
-            <SimpleMde value={markdown.text} onChange={changeText} options={markdownOptions}/>
+            <SimpleMde value={markdown.text} onChange={changeText} options={markdownOptions} className="markdownInput"/>
         </MarkDownInput>
         <div className="markdownTextArea">
             <Title>{markdown.title}</Title>
