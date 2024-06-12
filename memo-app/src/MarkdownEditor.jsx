@@ -24,33 +24,44 @@ const Input = styled.div`
         background-color: #f3f3f3;
         max-width: 1200px;
         width: 100%;
-        min-width: 700px;
+        min-width: 500px;
         height: 100%;
         font-size: 40px;
         font-weight: bold;
         border: none;
         white-space: wrap;
         field-sizing: content;
+        resize: none;
+        outline: none;
     }`;
 
 const MarkDownInput = styled.div`
     div {
         background-color: #f3f3f3;
-        //border: none !important
+        max-width: 1200px;
+        width: 100%;
+        min-width: 500px;
     }`
 
-const Title = styled.h1`
+const PreviewTitle = styled.h1`
     font-size: 40px;
     text-align: center;
-    min-width: 200px;
+    max-width: 1200px;
+    width: 100%;
+    min-width: 500px;
 `;
 
 const CodeBackGroundColor = styled.code`
     background-color: #f3f3f3;
 
     code {
-        background-color: #cfcfcf
+        background-color: #d1d0d0
     }`;
+
+const PreviewText = styled.div`
+    max-width: 1200px;
+    width: 100%;
+    min-width: 500px;`
 
 function MarkdownEditor() {
     const [markdown, setMarkdown] = useState(() => {
@@ -73,6 +84,11 @@ function MarkdownEditor() {
     useEffect(() => {
         hljs.highlightAll();
     }, []);
+
+    // 再レンダリングのたびにhighlight.jsを再適用
+    useEffect(() => {
+        hljs.highlightAll();
+    }, [markdown.text]);
 
     const changeTitle = (value) => {
         setMarkdown({
@@ -105,22 +121,19 @@ function MarkdownEditor() {
         minHeight: "500px",
         spellChecker: false,
         initialValue: "文字を入力",
-        // timeFormat
     }), []);
 
     return <EditorContainer>
         <Input>
-            {/*TODO: inputではなく、textareaにすること*/}
             <textarea value={markdown.title} onChange={changeTitle} placeholder="Title"/>
-            {/*<input value={markdown.title} onChange={changeTitle} placeholder="Title"/>*/}
         </Input>
         <MarkDownInput>
             <SimpleMde value={markdown.text} onChange={changeText} options={markdownOptions} className="markdownInput"/>
         </MarkDownInput>
         <div className="markdownTextArea">
-            <Title>{markdown.title}</Title>
+            <PreviewTitle>{markdown.title}</PreviewTitle>
             <CodeBackGroundColor>
-                <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked(markdown.text))}}/>
+                <PreviewText dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked(markdown.text))}}/>
             </CodeBackGroundColor>
         </div>
     </EditorContainer>
