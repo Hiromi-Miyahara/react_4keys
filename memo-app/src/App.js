@@ -7,8 +7,6 @@ display: flex;
 height: max-content;
 background-color: #f3f3f3;`
 
-console.log(JSON.parse(localStorage.getItem("markdown")))
-
 function App() {
     return (
         <MarkdownWrapper>

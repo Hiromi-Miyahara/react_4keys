@@ -1,10 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
 
-// TODO:
-//      localStorageに保存したデータ(メモのタイトル)がリストに表示されるようにする
-//      全体の
-
 const savedMarkdown = JSON.parse(localStorage.getItem("markdown"));
 
 const ListContainer = styled.ul`

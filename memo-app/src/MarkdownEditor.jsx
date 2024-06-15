@@ -77,15 +77,10 @@ function MarkdownEditor() {
             title: markdown.title,
             text: markdown.text,
             key: markdown.key
-        }));
+        }
+        ));
     }, [markdown]);
 
-    // highlightjsを初期化
-    useEffect(() => {
-        hljs.highlightAll();
-    }, []);
-
-    // 再レンダリングのたびにhighlight.jsを再適用
     useEffect(() => {
         hljs.highlightAll();
     }, [markdown.text]);
@@ -123,6 +118,10 @@ function MarkdownEditor() {
         initialValue: "文字を入力",
     }), []);
 
+    const createNewMemo = () => {
+        setMarkdown({title: "", text:"" , key:getUniqueStr() })
+    }
+
     return <EditorContainer>
         <Input>
             <textarea value={markdown.title} onChange={changeTitle} placeholder="Title"/>
@@ -136,6 +135,7 @@ function MarkdownEditor() {
                 <PreviewText dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked(markdown.text))}}/>
             </CodeBackGroundColor>
         </div>
+        <button onClick={createNewMemo}>新しいメモを作成</button>
     </EditorContainer>
 }
 
