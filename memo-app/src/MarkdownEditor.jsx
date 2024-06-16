@@ -15,10 +15,8 @@ const EditorContainer = styled.div`
     min-width: 600px;
     margin-right: 30px`
 
-// TODO: マークダウンインプットの横幅を固定したい
 // TODO; h1とかの大文字が画面幅を変えると小さくなってしまう
 // TODO; 新しいメモを作成した時に、即時に左側にメモができるようにしてほしい
-// TODO; メモリストのCSSをいい感じにしたい
 // TODO: コードハイライトが消えている
 // TODO; フォーカスを当てた時に、そこより後ろの文字が消えてしまっている。
 // TODO : メモの順番をソートできるように、メモの要素に作成日時的なものをつけてあげたい。
@@ -76,7 +74,6 @@ const CodeBackGroundColor = styled.code`
 
 const PreviewText = styled.div`
     max-width: 1200px;
-    //width: 100%;
     min-width: 600px;
     overflow-wrap: break-word;
     word-wrap: break-word;

@@ -5,7 +5,6 @@ const MemoListContainer = styled.div`
     background-color: #f3f3f3;
     padding: 20px;
     margin: 20px 0;
-    max-width: 1200px;
     width: 100%;
     min-width: 300px;
     max-width: 500px;
@@ -17,6 +16,11 @@ const MemoItem = styled.div`
     margin-bottom: 10px;
     cursor: pointer;
     border: 1px solid #ccc;
+    height: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height:20px ;
 
     &:hover {
         background-color: #f0f0f0;
