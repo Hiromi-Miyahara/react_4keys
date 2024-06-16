@@ -13,6 +13,15 @@ const EditorContainer = styled.div`
     display: flex;
     flex-direction: column;`
 
+// TODO: マークダウンインプットの横幅を固定したい
+// TODO; h1とかの大文字が画面幅を変えると小さくなってしまう
+// TODO; 新しいメモを作成した時に、即時に左側にメモができるようにしてほしい
+// TODO; メモリストのCSSをいい感じにしたい
+// TODO: コードハイライトが消えている
+// TODO; フォーカスを当てた時に、そこより後ろの文字が消えてしまっている。
+// TODO : メモの順番をソートできるように、メモの要素に作成日時的なものをつけてあげたい。
+// TODO; 作成したメモを削除できるようにしたい
+// TODO; 設計を考える
 
 const Input = styled.div`
     background-color: #f3f3f3;
@@ -63,42 +72,56 @@ const PreviewText = styled.div`
     width: 100%;
     min-width: 500px;`
 
-function MarkdownEditor() {
-    const [markdown, setMarkdown] = useState(() => {
-        const savedMarkdown = localStorage.getItem("markdown");
-        const parsedMarkdown = JSON.parse(savedMarkdown);
-        const title = parsedMarkdown.title ? parsedMarkdown.title : "";
-        const text = parsedMarkdown.text ? parsedMarkdown.text : "";
-        return {title: title, text: text, key: getUniqueStr()}
+function MarkdownEditor(props) {
+    const {currentMemoKey, setCurrentMemoKey} = props
+    const [memos, setMemos] = useState(() => {
+        const savedMemos = localStorage.getItem("memos");
+        return savedMemos ? JSON.parse(savedMemos) : [];
     });
 
-    useEffect(() => {
-        localStorage.setItem("markdown", JSON.stringify({
-            title: markdown.title,
-            text: markdown.text,
-            key: markdown.key
+    const [currentMemo, setCurrentMemo] = useState(() => {
+        const initialMemo = {title: "", text: "", key: getUniqueStr()};
+        if (currentMemoKey) {
+            const foundMemo = memos.find(memo => memo.key === currentMemoKey);
+            return foundMemo ? foundMemo : initialMemo;
         }
-        ));
-    }, [markdown]);
+        return initialMemo;
+    })
+    // console.log(currentMemo);
+
+    useEffect(() => {
+        localStorage.setItem("memos", JSON.stringify(memos));
+    }, [memos]);
 
     useEffect(() => {
         hljs.highlightAll();
-    }, [markdown.text]);
+    }, [currentMemo.text, currentMemoKey]);
+
+    useEffect(() => {
+        setCurrentMemo(()=>{
+            const foundMemo = memos.find(memo => memo.key === currentMemoKey);
+            return foundMemo ? foundMemo : currentMemo;
+        });
+    }, [currentMemoKey])
 
     const changeTitle = (value) => {
-        setMarkdown({
+        const updatedMemo = {
+            ...currentMemo,
             title: value.target.value,
-            text: markdown.text,
-            key: markdown.key ? markdown.key : getUniqueStr()
-        });
+            key: currentMemo.key || getUniqueStr()
+        };
+        setCurrentMemo(updatedMemo);
+        updateMemos(updatedMemo);
     }
 
     const changeText = (value) => {
-        setMarkdown({
-            title: markdown.title,
+        const updatedMemo = {
+            ...currentMemo,
             text: value,
-            key: markdown.key ? markdown.key : getUniqueStr()
-        });
+            key: currentMemo.key || getUniqueStr()
+        };
+        setCurrentMemo(updatedMemo);
+        updateMemos(updatedMemo);
     }
 
     function getUniqueStr(myStrong) {
@@ -119,24 +142,39 @@ function MarkdownEditor() {
     }), []);
 
     const createNewMemo = () => {
-        setMarkdown({title: "", text:"" , key:getUniqueStr() })
+        setCurrentMemo({title: "", text: "", key: getUniqueStr()})
     }
+
+    const updateMemos = (updatedMemo) => {
+        setMemos(prevMemos => {
+            const memoIndex = prevMemos.findIndex(memo => memo.key === updatedMemo.key);
+            if (memoIndex > -1) {
+                const newMemos = [...prevMemos];
+                newMemos[memoIndex] = updatedMemo;
+                return newMemos;
+            } else {
+                return [...prevMemos, updatedMemo];
+            }
+        });
+    };
 
     return <EditorContainer>
         <Input>
-            <textarea value={markdown.title} onChange={changeTitle} placeholder="Title"/>
+            <textarea value={currentMemo.title} onChange={changeTitle} placeholder="Title"/>
         </Input>
         <MarkDownInput>
-            <SimpleMde value={markdown.text} onChange={changeText} options={markdownOptions} className="markdownInput"/>
+            <SimpleMde value={currentMemo.text} onChange={changeText} options={markdownOptions}
+                       className="markdownInput"/>
         </MarkDownInput>
         <div className="markdownTextArea">
-            <PreviewTitle>{markdown.title}</PreviewTitle>
+            <PreviewTitle>{currentMemo.title}</PreviewTitle>
             <CodeBackGroundColor>
-                <PreviewText dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked(markdown.text))}}/>
+                <PreviewText dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked(currentMemo.text))}}/>
             </CodeBackGroundColor>
         </div>
         <button onClick={createNewMemo}>新しいメモを作成</button>
     </EditorContainer>
+
 }
 
 export default MarkdownEditor;

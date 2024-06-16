@@ -1,25 +1,42 @@
 import React from 'react';
 import styled from "styled-components";
 
-const savedMarkdown = JSON.parse(localStorage.getItem("markdown"));
+const MemoListContainer = styled.div`
+    background-color: #f3f3f3;
+    padding: 20px;
+    margin: 20px 0;
+    max-width: 1200px;
+    width: 100%;
+    min-width: 300px;
+    max-width: 500px;
+`;
 
-const ListContainer = styled.ul`
-    width: 250px;
-    padding: 0;
+const MemoItem = styled.div`
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border: 1px solid #ccc;
 
-    li {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+    &:hover {
+        background-color: #f0f0f0;
     }
-`
+`;
 
-function MarkdownList() {
+
+function MemoList(props) {
+    const {setCurrentMemoKey} = props
+    const memos = JSON.parse(localStorage.getItem("memos"));
     return (
-        <ListContainer className="listWrapper">
-                <li className="listContentTemp">{savedMarkdown.title}</li>
-        </ListContainer>
-    )
+        <MemoListContainer>
+            {memos.map(memo => (
+                <MemoItem key={memo.key} onClick={() => setCurrentMemoKey(memo.key)}>
+                    {memo.title || "無題のメモ"}
+                </MemoItem>
+            ))}
+        </MemoListContainer>
+
+    );
 }
 
-export default MarkdownList;
+export default MemoList;
