@@ -5,13 +5,15 @@ import {marked} from "marked";
 import DOMPurify from "dompurify";
 import hljs from 'highlight.js'
 import "highlight.js/styles/github.css";
-import EasyMDE from "easymde";
 import styled from "styled-components"
 import "./easyMDE.css";
 
 const EditorContainer = styled.div`
     display: flex;
-    flex-direction: column;`
+    flex-direction: column;
+    max-width: 1200px;
+    min-width: 600px;
+    margin-right: 30px`
 
 // TODO: マークダウンインプットの横幅を固定したい
 // TODO; h1とかの大文字が画面幅を変えると小さくなってしまう
@@ -22,6 +24,8 @@ const EditorContainer = styled.div`
 // TODO : メモの順番をソートできるように、メモの要素に作成日時的なものをつけてあげたい。
 // TODO; 作成したメモを削除できるようにしたい
 // TODO; 設計を考える
+// TODO; styledComponentのまとまりが悪いので、他のファイルに切り分けたい
+// TODO; 新しいメモ作成ボタンの位置、デザインを整える
 
 const Input = styled.div`
     background-color: #f3f3f3;
@@ -60,6 +64,9 @@ const PreviewTitle = styled.h1`
     min-width: 500px;
 `;
 
+const PreviewTextWrapper = styled.div`
+    width: 100%;`
+
 const CodeBackGroundColor = styled.code`
     background-color: #f3f3f3;
 
@@ -69,8 +76,11 @@ const CodeBackGroundColor = styled.code`
 
 const PreviewText = styled.div`
     max-width: 1200px;
-    width: 100%;
-    min-width: 500px;`
+    //width: 100%;
+    min-width: 600px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;`
 
 function MarkdownEditor(props) {
     const {currentMemoKey, setCurrentMemoKey} = props
@@ -87,7 +97,6 @@ function MarkdownEditor(props) {
         }
         return initialMemo;
     })
-    // console.log(currentMemo);
 
     useEffect(() => {
         localStorage.setItem("memos", JSON.stringify(memos));
@@ -98,7 +107,7 @@ function MarkdownEditor(props) {
     }, [currentMemo.text, currentMemoKey]);
 
     useEffect(() => {
-        setCurrentMemo(()=>{
+        setCurrentMemo(() => {
             const foundMemo = memos.find(memo => memo.key === currentMemoKey);
             return foundMemo ? foundMemo : currentMemo;
         });
@@ -142,7 +151,10 @@ function MarkdownEditor(props) {
     }), []);
 
     const createNewMemo = () => {
-        setCurrentMemo({title: "", text: "", key: getUniqueStr()})
+        const newMemo = {title: "", text: "", key: getUniqueStr()};
+        setCurrentMemo(newMemo);
+        setCurrentMemoKey(newMemo.key);
+        setMemos([...memos, newMemo]);
     }
 
     const updateMemos = (updatedMemo) => {
@@ -158,7 +170,7 @@ function MarkdownEditor(props) {
         });
     };
 
-    return <EditorContainer>
+    return <EditorContainer className="markdownWrapper">
         <Input>
             <textarea value={currentMemo.title} onChange={changeTitle} placeholder="Title"/>
         </Input>
@@ -166,12 +178,12 @@ function MarkdownEditor(props) {
             <SimpleMde value={currentMemo.text} onChange={changeText} options={markdownOptions}
                        className="markdownInput"/>
         </MarkDownInput>
-        <div className="markdownTextArea">
+        <PreviewTextWrapper>
             <PreviewTitle>{currentMemo.title}</PreviewTitle>
             <CodeBackGroundColor>
                 <PreviewText dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked(currentMemo.text))}}/>
             </CodeBackGroundColor>
-        </div>
+        </PreviewTextWrapper>
         <button onClick={createNewMemo}>新しいメモを作成</button>
     </EditorContainer>
 
