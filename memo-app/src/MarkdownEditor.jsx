@@ -24,6 +24,10 @@ const EditorContainer = styled.div`
 // TODO; 設計を考える
 // TODO; styledComponentのまとまりが悪いので、他のファイルに切り分けたい
 // TODO; 新しいメモ作成ボタンの位置、デザインを整える
+// TODO; タイトルを変更した時に、リストのタイトルも動的に変わるようにしたい
+
+// TODO: プレビュー側の改行が効いていない
+
 
 const Input = styled.div`
     background-color: #f3f3f3;
@@ -83,7 +87,7 @@ function MarkdownEditor(props) {
     const {currentMemoKey, setCurrentMemoKey} = props
     const [memos, setMemos] = useState(() => {
         const savedMemos = localStorage.getItem("memos");
-        return savedMemos ? JSON.parse(savedMemos) : [];
+        return (savedMemos === "undefined" || savedMemos === null) ? [] : JSON.parse(savedMemos);
     });
 
     const [currentMemo, setCurrentMemo] = useState(() => {
@@ -154,6 +158,14 @@ function MarkdownEditor(props) {
         setMemos([...memos, newMemo]);
     }
 
+    const deleteCurrentMemo = () => {
+        // const deletedMemos = memos.filter(memo => memo.key !== currentMemoKey)
+        // console.log(deletedMemos)
+        console.log(memos)
+        // setMemos([])
+        // setMemos([deletedMemos])
+    }
+
     const updateMemos = (updatedMemo) => {
         setMemos(prevMemos => {
             const memoIndex = prevMemos.findIndex(memo => memo.key === updatedMemo.key);
@@ -182,6 +194,7 @@ function MarkdownEditor(props) {
             </CodeBackGroundColor>
         </PreviewTextWrapper>
         <button onClick={createNewMemo}>新しいメモを作成</button>
+        <button onClick={deleteCurrentMemo}>現在のメモを削除</button>
     </EditorContainer>
 
 }
